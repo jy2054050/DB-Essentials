@@ -1,0 +1,84 @@
+CREATE TABLE EMPLOYEE(
+EMPNO VARCHAR(8) not null,
+EMPNAME VARCHAR(20) not null,
+DEPARTMENT VARCHAR(20) not null,
+EMAIL VARCHAR(20) not null,
+PHONE VARCHAR(20) not null,
+CONSTRAINT EMPLOYEEPK PRIMARY KEY (EMPNO),
+CONSTRAINT UNIQUE (EMAIL) );
+**********************************************************************************************************************
+CREATE TABLE RESOURCETBL(
+RESNO VARCHAR(8)   NOT NULL, 
+RESNAME VARCHAR(15)   NOT NULL, 
+RATE INTEGER  NOT NULL,
+CONSTRAINT PK_RESOURCETBL PRIMARY KEY (RESNO)
+);
+**********************************************************************************************************************
+CREATE TABLE EVENTREQUEST(
+EVENTNO varchar(10) not null,
+DATEHELD DATE not null,
+DATEREQ DATE not null,
+CUSTNO varchar(10) not null,
+FACNO varchar(10) not null,
+DATEAUTH DATE,
+STATUS varchar(10) not null,
+ESTCOST INTEGER NOT NULL,
+ESTAUDIENCE INTEGER NOT NULL,
+BUDNO varchar(10),
+CONSTRAINT PK_EVENTREQUEST PRIMARY KEY (EVENTNO),
+CONSTRAINT FK_EVENTREQUEST FOREIGN KEY (CUSTNO) REFERENCES CUSTOMER (CUSTNO),
+CONSTRAINT FK_FACILITY FOREIGN KEY (FACNO) REFERENCES FACILITY (FACNO));
+**********************************************************************************************************************
+
+CREATE TABLE FACILITY
+(FACNO VARCHAR(8) NOT NULL, 
+ FACNAME VARCHAR(30) NOT NULL,
+ CONSTRAINT PK_FACILITY PRIMARY KEY (FACNO) 
+ CONSTRAINT Unique_FacName UNIQUE(FACNAME));
+ **********************************************************************************************************************
+ CREATE TABLE CUSTOMER(
+	CUSTNO varchar(10) not null,
+	CUSTNAME varchar(20) not null,
+	ADDRESS varchar(20) not null,
+	INTERNAL varchar(10) not null,
+	CONTACT varchar(20) not null,
+	PHONE integer not null,
+	CITY varchar(10) not null,
+	STATE varchar(10) not null,
+	ZIP varchar(10) not null,
+	CONSTRAINT PK_CUSTOMER PRIMARY KEY (CUSTNO));
+**********************************************************************************************************************
+CREATE TABLE LOCATION(
+	LOCNO varchar(10) not null,
+	FACNO varchar(8) not null,
+	LOCNAME varchar(20) not null,
+	CONSTRAINT PK_LOCATION PRIMARY KEY (LOCNO),
+	CONSTRAINT FK_LOCATION FOREIGN KEY (FACNO) REFERENCES FACILITY (FACNO));
+**********************************************************************************************************************
+CREATE TABLE EVENTPLAN(
+PLANNO varchar(10) not null,
+EVENTNO varchar(10) not null,
+WORKDATE DATE not null,
+NOTES varchar(30),
+ACTIVITY  varchar(10) not null,
+EMPNO varchar(8),
+CONSTRAINT PK_EVENTPLAN PRIMARY KEY (PLANNO),
+CONSTRAINT FK_EVENTREQUEST FOREIGN KEY (EVENTNO) REFERENCES EVENTREQUEST (EVENTNO),
+CONSTRAINT FK_EMPLOYEE FOREIGN KEY (EMPNO) REFERENCES EMPLOYEE (EMPNO));
+**********************************************************************************************************************
+CREATE TABLE EVENTPLANLINE(
+PLANNO varchar(10) not null,
+LINENO integer not null,
+TIMESTART DATETIME not null,
+TIMEEND DATETIME not null,
+NUMBERFLD integer not null,
+LOCNO varchar(10) not null,
+RESNO varchar(10) not null,
+CONSTRAINT PK_EVENTPLANLINE PRIMARY KEY (PLANNO , LINENO),
+CONSTRAINT FK_LOCATIONNO FOREIGN KEY (LOCNO) REFERENCES LOCATION (LOCNO),
+CONSTRAINT FK_PLANNO1 FOREIGN KEY (PLANNO) REFERENCES EVENTPLAN (PLANNO),
+CONSTRAINT FK_RESNO1 FOREIGN KEY (RESNO) REFERENCES RESOURCETBL (RESNO));
+**********************************************************************************************************************
+
+
+ 
